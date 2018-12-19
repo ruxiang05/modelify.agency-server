@@ -1,21 +1,31 @@
-import express from 'express';
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 const app = express();
-const port = process.env.PORT || 5656;
-// routes go here
+const keys = require('../config/keys');
+const router = require('./routes/index.js');
+const PORT = process.env.PORT || 5656;
 
-app.get('/api/users', (req, res) => {
-  res.json([
-    {
-      id: 1,
-      name: "Ruxandra"
-    },
-    {
-      id: 2,
-      title: "Borja"
-    }
-  ])
-})
+//Connect to hosted database
+mongoose.connect(
+  keys.MONGODB_URI,
+  { useNewUrlParser: true }
+);
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.listen(port, () => {
-  console.log(`http://localhost:${port}`)
-})
+// Parse incoming requests data
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// Use routes
+app.use(router);
+
+
+app.listen(PORT, err => {
+  if (err) {
+    throw err;
+  } else {
+    console.log(`Server running on port: ${PORT}`);
+  }
+});
