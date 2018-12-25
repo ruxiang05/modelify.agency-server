@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
+
 const app = express();
 const keys = require('../config/keys');
 const router = require('./routes/index.js');
@@ -9,10 +11,13 @@ const PORT = process.env.PORT || 5656;
 //Connect to hosted database
 mongoose.connect(
   keys.MONGODB_URI,
-  { useNewUrlParser: true }
+  { useNewUrlParser: true, useCreateIndex: true }
 );
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Parse incoming requests data
 app.use(bodyParser.json());

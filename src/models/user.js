@@ -1,16 +1,14 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 const UserSchema = new Schema({
+  _id: mongoose.Schema.Types.ObjectId,
   email: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
+    match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
   },
-  name: {
-    type: String,
-    trim: true,
-    required: true
-  },
-  phoneNumber: {
+  password: {
     type: String,
     required: true
   }
