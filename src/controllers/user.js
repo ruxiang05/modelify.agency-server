@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 
 const signup = (req,res) => {
-  const {email, password} = req.body;
+  const {email, password, role, firstName, lastName, phoneNumber, agentInfo, modelInfo} = req.body;
+  console.log(req.body);
   //Check if user already exists
   User.find({email: email})
   .exec()
@@ -19,10 +20,26 @@ const signup = (req,res) => {
           if (err) {
             return res.status(500).json({ error: err });
           } else {
-            const user = new User({
+            const newUser = {
               _id: new mongoose.Types.ObjectId(),
-              email: email,
-              password: hash
+              email,
+              password: hash,
+              firstName,
+              lastName,
+              phoneNumber,
+              role
+            }
+            switch (role){
+              case 'agent': {
+                newUser.agentInfo = agentInfo;
+              }
+              case 'model': {
+                newUser.modelInfo = modelInfo;
+              }
+            }
+            console.log({...newUser});
+            const user = new User({
+              ...newUser
             });
             user
               .save()
