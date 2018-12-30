@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const { Schema } = mongoose;
 
 const isModel = () => this.role === 'model';
@@ -9,54 +10,53 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+    match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   firstName: {
     type: String,
-    required: true
+    required: true,
   },
   lastName: {
     type: String,
-    required: true
+    required: true,
   },
   phoneNumber: {
     type: String,
-    required: true
+    required: true,
   },
   role: {
     type: ['model', 'agent'],
-    required: true
+    required: true,
   },
   agentInfo: {
     models: {
       type: [String],
       required: isAgent(),
-      default: undefined
-    }
+      default: undefined,
+    },
   },
   modelInfo: {
     dateOfBirth: {
       type: Date,
-      required: isModel()
+      required: isModel(),
     },
     address: String,
     characteristics: {
       eyes: String,
-      hair: String
+      hair: String,
     },
     measurements: {
       height: String,
       weight: String,
       chest: String,
       waist: String,
-      hips: String
-    }
-  }
+      hips: String,
+    },
+  },
 });
 
 module.exports = mongoose.model('User', UserSchema);
-
