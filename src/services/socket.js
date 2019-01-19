@@ -1,8 +1,9 @@
 /* eslint-disable no-param-reassign */
+const chatController = require('../controllers/chat');
 
-const chatController = require('./controllers/chat');
+const onlineUsers = {};
 
-module.exports = (socket, io, onlineUsers) => {
+const socketHandler = (socket, io) => {
   socket.on('online', async (userId) => {
     socket.user = userId;
     onlineUsers[userId] = socket.id;
@@ -19,4 +20,8 @@ module.exports = (socket, io, onlineUsers) => {
     socket.adapter.rooms = {};
     delete onlineUsers[socket.user];
   });
+};
+
+module.exports = {
+  socketHandler,
 };
