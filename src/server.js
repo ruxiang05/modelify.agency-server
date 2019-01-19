@@ -6,10 +6,9 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const router = require('./routes/index.js');
 const keys = require('../config/keys');
-const socketHandler = require('./socket');
+const { socketHandler } = require('./services/socket');
 
 const PORT = process.env.PORT || 5656;
-const onlineUsers = {};
 
 // Connect to hosted database
 mongoose.connect(
@@ -17,6 +16,7 @@ mongoose.connect(
   { useNewUrlParser: true, useCreateIndex: true },
 );
 const db = mongoose.connection;
+mongoose.set('useFindAndModify', false);
 
 /* eslint-disable no-console */
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -31,14 +31,18 @@ app.use(cors());
 // Use routes
 app.use(router);
 
+/* istanbul ignore next */
 io.on('connection', (socket) => {
-  socketHandler(socket, io, onlineUsers);
+  socketHandler(socket, io);
 });
-
-server.listen(PORT, (err) => {
-  if (err) {
-    throw err;
-  } else {
-    console.log(`Server running on port: ${PORT}`);
-  }
-});
+/* istanbul ignore next */
+if (process.env.NODE_ENV !== 'test') {
+  server.listen(PORT, (err) => {
+    if (err) {
+      throw err;
+    } else {
+      console.log(`Server running on port: ${PORT}`);
+    }
+  });
+}
+module.exports = app;

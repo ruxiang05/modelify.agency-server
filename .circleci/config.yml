@@ -47,13 +47,42 @@ jobs:
           paths:
             - node_modules
           key: dependency-cache-{{ checksum "package.json" }}
+  test:
+    docker:
+      - image: circleci/node:11
+      - image: circleci/mongo:4.1.9
+        command: [mongod]
+        ports:
+          - 27017:27017
+    working_directory: ~/modelify-server
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - dependency-cache-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - dependency-cache-
+
+      - run: npm install
+
+      - run: npm run test
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependency-cache-{{ checksum "package.json" }}
       
 
 workflows:
   version: 2
-  lint_and_build:
+  lint_and_build_and_test:
     jobs:
       - lint
       - build:
           requires:
             - lint
+      - test: 
+          requires: 
+            - build
