@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Use routes
-app.use(router);
+app.use('/', router);
 
 
 app.listen(PORT, (err) => {
