@@ -18,15 +18,12 @@ const db = mongoose.connection;
 /* eslint-disable no-console */
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Parse incoming requests data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Use routes
-app.use('/', router);
+app.use('/api', router);
 
 
 app.listen(PORT, (err) => {
