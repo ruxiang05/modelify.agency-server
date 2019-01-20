@@ -2,7 +2,7 @@
   "name": "modelify.agency-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "lint": "eslint --fix .",
     "start": "node src/server.js",
