@@ -22,7 +22,7 @@ const signup = (req, res) => {
         if (err) {
           return res.status(500).json({ error: err });
         }
-        const newUser = {
+        const newUser = new User({
           _id: new mongoose.Types.ObjectId(),
           email,
           password: hash,
@@ -30,7 +30,7 @@ const signup = (req, res) => {
           lastName,
           phoneNumber,
           role,
-        };
+        });
         switch (role) {
           case 'agent': {
             newUser.agentInfo = agentInfo;
