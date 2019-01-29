@@ -69,7 +69,7 @@ const login = (req, res) => {
         if (result) {
           const token = jwt.sign(
             {
-              email: user.email,
+              ...user,
             },
             keys.JWT_SECRET,
             {
@@ -89,29 +89,8 @@ const login = (req, res) => {
     });
 };
 
-const getUserFromJwt = (req, res) => {
-  if (!req.headers && !req.headers.authorization) {
-    return res.json(403).json({ success: false, error: 'No authorization header' });
-  }
-  const token = req.headers.authorization.split(' ')[1];
-  if (token) {
-    const decoded = jwt.verify(token, keys.JWT_SECRET);
-    User.findOne({ email: decoded.email }).select('-password').then((user) => {
-      if (!user) {
-        return res.status(401).json({
-          success: false,
-          message: 'User not found',
-        });
-      }
-      return user;
-    });
-  } else {
-    return res.status(403).json({ success: false, error: 'No token provided' });
-  }
-};
-
 const deleteUser = (req, res) => {
-  User.deleteOne({ _id: req.params.id })
+  User.deleteOne({ email: req.user.email })
     .exec()
     .then(() => {
       res.status(200).json({
@@ -131,5 +110,4 @@ module.exports = {
   signup,
   login,
   deleteUser,
-  getUserFromJwt,
 };
