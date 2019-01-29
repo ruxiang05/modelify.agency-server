@@ -67,9 +67,11 @@ const login = (req, res) => {
           return res.status(401).json({ success: false, message: 'Auth failed' });
         }
         if (result) {
+          const userData = user.toObject();
+          delete userData.password;
           const token = jwt.sign(
             {
-              ...user,
+              userData,
             },
             keys.JWT_SECRET,
             {
