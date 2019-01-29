@@ -16,9 +16,9 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - dependency-cache-
 
-      - run: yarn install
+      - run: npm install
 
-      - run: yarn lint
+      - run: npm run lint
 
       - save_cache:
           paths:

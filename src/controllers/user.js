@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const keys = require('../../config/keys');
@@ -70,7 +70,6 @@ const login = (req, res) => {
           const token = jwt.sign(
             {
               email: user.email,
-              id: user.id,
             },
             keys.JWT_SECRET,
             {
