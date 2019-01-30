@@ -29,7 +29,8 @@ const UserSchema = new Schema({
     required: true,
   },
   role: {
-    type: ['model', 'agent'],
+    type: String,
+    enum: ['model', 'agent'],
     required: true,
   },
   agentInfo: {
