@@ -15,13 +15,12 @@ const signup = (req, res) => {
     .then((user) => {
       if (user.length >= 1) {
         return res.status(409).json({
-          success: false,
-          message: 'Email already used',
+          error: 'Email already used',
         });
       }
       return bcrypt.hash(password, 10, (err, hash) => {
         if (err) {
-          return res.status(500).json({ success: false, error: err });
+          return res.status(500).json({ error: 'Hashing failed' });
         }
         const newUser = new User({
           _id: new mongoose.Types.ObjectId(),
@@ -46,8 +45,8 @@ const signup = (req, res) => {
 
         newUser
           .save()
-          .then(() => res.status(200).json({ success: true, message: 'User created' }))
-          .catch(error => res.status(500).json({ success: false, error }));
+          .then(() => res.status(200).json({ message: 'User created' }))
+          .catch(() => res.status(500).json({ error: 'Could not create user' }));
       });
     });
 };
@@ -58,13 +57,12 @@ const login = (req, res) => {
     .then((user) => {
       if (!user) {
         return res.status(401).json({
-          success: false,
-          message: 'Email not found',
+          error: 'Email not found',
         });
       }
       return bcrypt.compare(password, user.password, (err, result) => {
         if (err) {
-          return res.status(401).json({ success: false, message: 'Auth failed' });
+          return res.status(401).json({ error: 'Auth failed' });
         }
         if (result) {
           const userData = user.toObject();
@@ -87,29 +85,37 @@ const login = (req, res) => {
       });
     })
     .catch((err) => {
-      res.status(500).json({ success: false, error: err });
+      res.status(500).json({ error: err });
     });
 };
 
-const deleteUser = (req, res) => {
-  User.deleteOne({ email: req.user.email })
-    .exec()
-    .then(() => {
-      res.status(200).json({
-        success: true,
-        message: 'User deleted',
-      });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        success: false,
-        error: err,
-      });
+const updateUser = (req, res) => {
+  const { user, body: newDetails } = req;
+  if (user) {
+    User.findByIdAndUpdate(user.id, newDetails, (err, updatedUser) => {
+      if (err) return res.status(400).json({ error: 'Could not update user' });
+      return res.status(200).json({ message: 'Updated user', user: updatedUser });
     });
+  } else {
+    return res.status(400).json({ error: 'User not provided' });
+  }
+};
+
+const deleteUser = (req, res) => {
+  const { user } = req;
+  if (user) {
+    User.findByIdAndDelete(user.id, (err) => {
+      if (err) return res.status(400).json({ error: 'User could not be deleted' });
+      return res.status(200).json({ message: 'User deleted' });
+    });
+  } else {
+    return res.status(401).json({ error: 'User not provided' });
+  }
 };
 
 module.exports = {
   signup,
   login,
+  updateUser,
   deleteUser,
 };
