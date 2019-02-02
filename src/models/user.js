@@ -35,9 +35,9 @@ const UserSchema = new Schema({
   },
   agentInfo: {
     models: {
-      type: [String],
+      type: [Schema.Types.ObjectId],
       required: isAgent(),
-      default: undefined,
+      default: [],
     },
   },
   modelInfo: {
