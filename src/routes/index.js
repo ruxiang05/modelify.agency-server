@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.use('/users', UserRoutes);
 router.use('/jobs', JobRoutes);
-router.use('/agent', AgentRoutes);
+router.use('/agents', AgentRoutes);
 
 router.get('/', (req, res) => {
   res.status(200).json({ message: 'API IS UP!' });
