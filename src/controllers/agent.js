@@ -1,6 +1,7 @@
 const User = require('../models/user');
 
 const addModel = (req, res) => {
+  console.log(req.body); // eslint-disable-line
   const { model } = req.body;
   const agent = req.user;
 
@@ -12,7 +13,7 @@ const addModel = (req, res) => {
     .then((foundModel) => {
       User.findById(agent.id, '-password', (err, foundAgent) => {
         if (err) return res.status(401).json({ error: 'Could not find agent' });
-        if (!foundAgent.agentInfo.models.indexOf(foundModel.id) === -1) {
+        if (foundAgent.agentInfo.models.indexOf(foundModel.id) === -1) {
           foundAgent.agentInfo.models.push(foundModel.id);
           foundAgent.save();
         } else {
