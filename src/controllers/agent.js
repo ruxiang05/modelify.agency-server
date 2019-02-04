@@ -29,7 +29,7 @@ const getModels = (req, res) => {
 
   if (agent) {
     User.findById(agent.id, '-password -__v').populate('agentInfo.models', '-password -__v').exec()
-      .then(foundAgent => res.status(500).json({ message: 'Retrieved all models', agent: foundAgent }));
+      .then(foundAgent => res.status(200).json({ message: 'Retrieved all models', agent: foundAgent }));
   } else {
     return res.status(500).json({ error: 'Agent non-existent' });
   }
