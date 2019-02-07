@@ -17,11 +17,11 @@ const createJob = (req, res) => {
         });
         newJob
           .save()
-          .then(savedJob => res.status(500).json({ message: 'Job created', job: savedJob }))
+          .then(savedJob => res.status(200).json({ message: 'Job created', job: savedJob }))
           .catch(() => res.status(500).json({ error: 'Could not create job' }));
       });
   } else {
-    return res.status(500).json({ error: 'Model or agent non-existent' });
+    return res.status(400).json({ error: 'Model or agent non-existent' });
   }
 };
 
