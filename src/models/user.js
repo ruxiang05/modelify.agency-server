@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const isModel = () => this.role === 'model';
-const isAgent = () => this.role === 'agent';
 const UserSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   email: {
@@ -16,11 +14,7 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
+  name: {
     type: String,
     required: true,
   },
@@ -36,26 +30,53 @@ const UserSchema = new Schema({
   agentInfo: {
     models: {
       type: [Schema.Types.ObjectId],
-      required: isAgent(),
       default: [],
     },
   },
   modelInfo: {
     dateOfBirth: {
-      type: Date,
-      required: isModel(),
+      type: String,
+      default: '',
     },
-    address: String,
+    address: {
+      type: String,
+      default: '',
+    },
     characteristics: {
-      eyes: String,
-      hair: String,
+      eyes: {
+        type: String,
+        default: '',
+      },
+      hair: {
+        type: String,
+        default: '',
+      },
+      skin: {
+        type: String,
+        default: '',
+      },
     },
     measurements: {
-      height: String,
-      weight: String,
-      chest: String,
-      waist: String,
-      hips: String,
+      height: {
+        type: String,
+        default: '',
+      },
+      weight: {
+        type: String,
+        default: '',
+      },
+      chest: {
+        type: String,
+        default: '',
+      },
+      waist: {
+        type: String,
+        default: '',
+      },
+      hips: {
+        type: String,
+        default: '',
+      },
     },
   },
 });
