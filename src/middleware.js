@@ -10,7 +10,7 @@ const verifyToken = (req, res, next) => {
   if (token) {
     jwt.verify(token, keys.JWT_SECRET, (err, decoded) => {
       if (err) return res.json({ error: 'Invalid token.' });
-      User.findOne({ email: decoded.userData.email }).select('-password').then((user) => {
+      User.findOne({ email: decoded.user.email }).select('-password').then((user) => {
         if (!user) {
           return res.status(404).json({
             error: 'User not found',

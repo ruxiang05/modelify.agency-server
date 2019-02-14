@@ -6,7 +6,7 @@ const keys = require('../../config/keys');
 
 const signup = (req, res) => {
   const {
-    email, password, role, firstName, lastName, phoneNumber, agentInfo, modelInfo,
+    email, password, ...details
   } = req.body;
 
   // Check if user already exists
@@ -26,23 +26,8 @@ const signup = (req, res) => {
           _id: new mongoose.Types.ObjectId(),
           email,
           password: hash,
-          firstName,
-          lastName,
-          phoneNumber,
-          role,
+          ...details,
         });
-        switch (role) {
-          case 'agent': {
-            newUser.agentInfo = agentInfo;
-            break;
-          }
-          case 'model': {
-            newUser.modelInfo = modelInfo;
-            break;
-          }
-          default:
-        }
-
         newUser
           .save()
           .then(() => res.status(200).json({ message: 'User created' }))
@@ -53,6 +38,7 @@ const signup = (req, res) => {
 
 const login = (req, res) => {
   const { email, password } = req.body;
+  // TODO: delete password and v with select
   User.findOne({ email })
     .then((user) => {
       if (!user) {
@@ -67,9 +53,10 @@ const login = (req, res) => {
         if (result) {
           const userData = user.toObject();
           delete userData.password;
+          delete userData.__v; //eslint-disable-line
           const token = jwt.sign(
             {
-              userData,
+              user: userData,
             },
             keys.JWT_SECRET,
             {
@@ -92,12 +79,26 @@ const login = (req, res) => {
 const updateUser = (req, res) => {
   const { user, body: newDetails } = req;
   if (user) {
-    User.findByIdAndUpdate(user.id, newDetails, (err, updatedUser) => {
+    User.findOneAndUpdate({ _id: user.id }, newDetails, (err, updatedUser) => {
       if (err) return res.status(400).json({ error: 'Could not update user' });
-      return res.status(200).json({ message: 'Updated user', user: updatedUser });
+      if (updatedUser) {
+        const userData = updatedUser.toObject();
+        delete userData.password;
+        delete userData.__v; //eslint-disable-line
+        const token = jwt.sign(
+          {
+            user: userData,
+          },
+          keys.JWT_SECRET,
+          {
+            expiresIn: '24h',
+          },
+        );
+        return res.status(200).json({ message: 'Updated user', token });
+      }
     });
   } else {
-    return res.status(400).json({ error: 'User not provided' });
+    return res.status(401).json({ error: 'User not provided' });
   }
 };
 
