@@ -45,6 +45,30 @@ const updateJob = (req, res) => {
   });
 };
 
+const acceptJob = (req, res) => {
+  const job = req.body;
+  Job.findByIdAndUpdate(job.id, { status: 'in progress' }, { new: true }, (err, updatedJob) => {
+    if (err) return res.status(400).json({ error: 'Could not accept job' });
+    return res.status(200).json({ message: 'Job accepted', job: updatedJob });
+  });
+};
+
+const completeJob = (req, res) => {
+  const job = req.body;
+  Job.findByIdAndUpdate(job.id, { status: 'complete' }, { new: true }, (err, updatedJob) => {
+    if (err) return res.status(400).json({ error: 'Could not accept job' });
+    return res.status(200).json({ message: 'Job accepted', job: updatedJob });
+  });
+};
+
+const declineJob = (req, res) => {
+  const job = req.body;
+  Job.findByIdAndUpdate(job.id, { status: 'declined' }, { new: true }, (err, updatedJob) => {
+    if (err) return res.status(400).json({ error: 'Could not complete job' });
+    return res.status(200).json({ message: 'Job complete', job: updatedJob });
+  });
+};
+
 const deleteJob = (req, res) => {
   const { id, agent } = req.body;
   Job.findOneAndDelete({ _id: id, agent }, (err) => {
@@ -57,5 +81,8 @@ module.exports = {
   getJobs,
   createJob,
   updateJob,
+  acceptJob,
+  completeJob,
+  declineJob,
   deleteJob,
 };
