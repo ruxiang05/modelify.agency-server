@@ -1,11 +1,12 @@
-const express = require('express');
+const app = require('express')();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 const router = require('./routes/index.js');
 const keys = require('../config/keys');
 
-const app = express();
 const PORT = process.env.PORT || 5656;
 
 // Connect to hosted database
@@ -28,8 +29,11 @@ app.use(cors());
 // Use routes
 app.use(router);
 
+io.on('connection', (socket) => {
+  console.log(socket.id);
+});
 
-app.listen(PORT, (err) => {
+server.listen(PORT, (err) => {
   if (err) {
     throw err;
   } else {
