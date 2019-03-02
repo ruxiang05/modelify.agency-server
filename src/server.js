@@ -30,7 +30,7 @@ app.use(cors());
 app.use(router);
 
 io.on('connection', (socket) => {
-  console.log(socket.id);
+  console.log('Socket connection :', socket.id);
 });
 
 server.listen(PORT, (err) => {
