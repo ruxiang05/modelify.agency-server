@@ -76,6 +76,18 @@ const login = (req, res) => {
     });
 };
 
+const getUserbyId = (req, res) => {
+  const { user, body: userToFind } = req;
+  if (user) {
+    User.findById(userToFind, (err, foundUser) => {
+      if (err) return res.status(400).json({ error: 'Could not find user' });
+      return res.status(200).json({ message: 'User found', user: foundUser });
+    });
+  } else {
+    return res.status(401).json({ error: 'User not provided' });
+  }
+};
+
 const updateUser = (req, res) => {
   const { user, body: newDetails } = req;
   if (user) {
@@ -117,6 +129,7 @@ const deleteUser = (req, res) => {
 module.exports = {
   signup,
   login,
+  getUserbyId,
   updateUser,
   deleteUser,
 };

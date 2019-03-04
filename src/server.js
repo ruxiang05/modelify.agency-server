@@ -6,8 +6,10 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const router = require('./routes/index.js');
 const keys = require('../config/keys');
+const socketHandler = require('./socket');
 
 const PORT = process.env.PORT || 5656;
+const onlineUsers = {};
 
 // Connect to hosted database
 mongoose.connect(
@@ -30,7 +32,7 @@ app.use(cors());
 app.use(router);
 
 io.on('connection', (socket) => {
-  console.log('Socket connection :', socket.id);
+  socketHandler(socket, io, onlineUsers);
 });
 
 server.listen(PORT, (err) => {

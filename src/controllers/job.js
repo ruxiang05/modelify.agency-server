@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Job = require('../models/job');
 const User = require('../models/user');
+const chatController = require('./chat');
 
 const createJob = (req, res) => {
   const { model: modelEmail, ...jobDetails } = req.body;
@@ -17,7 +18,10 @@ const createJob = (req, res) => {
         });
         newJob
           .save()
-          .then(savedJob => res.status(200).json({ message: 'Job created', job: savedJob }))
+          .then((savedJob) => {
+            chatController.createChat(savedJob, res);
+            return res.status(200).json({ message: 'Job created', job: savedJob });
+          })
           .catch(() => res.status(500).json({ error: 'Could not create job' }));
       });
   } else {
