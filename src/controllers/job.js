@@ -32,7 +32,7 @@ const createJob = (req, res) => {
 const getJobs = (req, res) => {
   const { user } = req;
   if (user) {
-    Job.find({ [`${user.role}`]: user.id }, (err, jobs) => {
+    Job.find({ [`${user.role}`]: user.id }).sort({ date: 'desc' }).exec((err, jobs) => {
       if (err) return res.status(400).json({ error: 'Could not find jobs' });
       return res.status(200).json({ message: 'Jobs found', jobs });
     });
