@@ -91,7 +91,7 @@ const getUserbyId = (req, res) => {
 const updateUser = (req, res) => {
   const { user, body: newDetails } = req;
   if (user) {
-    User.findOneAndUpdate({ _id: user.id }, newDetails, (err, updatedUser) => {
+    User.findOneAndUpdate({ _id: user.id }, newDetails, { new: true }, (err, updatedUser) => {
       if (err) return res.status(400).json({ error: 'Could not update user' });
       if (updatedUser) {
         const userData = updatedUser.toObject();

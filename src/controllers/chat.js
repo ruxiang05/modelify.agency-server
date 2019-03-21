@@ -15,8 +15,8 @@ const getChats = (req, res) => {
   const { user } = req;
   if (user) {
     Chat.find({ users: { $in: [user.id] } }).populate('job users messages').exec((err, chats) => {
-      chats.sort((a, b) => b.job.date - a.job.date);
       if (err) return res.status(400).json({ error: 'Could not find chats' });
+      if (chats.length > 1) { chats.sort((a, b) => b.job.date - a.job.date); }
       return res.status(200).json({ message: 'Chats found', chats });
     });
   } else {

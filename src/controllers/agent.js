@@ -1,7 +1,6 @@
 const User = require('../models/user');
 
 const addModel = (req, res) => {
-  console.log(req.body); // eslint-disable-line
   const { model } = req.body;
   const agent = req.user;
 
