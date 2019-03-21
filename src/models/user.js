@@ -27,6 +27,10 @@ const UserSchema = new Schema({
     enum: ['model', 'agent'],
     required: true,
   },
+  googleCalendarAPIToken: {
+    type: Object,
+    default: '',
+  },
   agentInfo: {
     models: {
       type: [Schema.Types.ObjectId],

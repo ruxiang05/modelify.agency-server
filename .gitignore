@@ -77,3 +77,6 @@ config/env/dev.js
 
 # DynamoDB Local files
 .dynamodb/
+
+# Google Calendar API Token
+src/services/token.json
