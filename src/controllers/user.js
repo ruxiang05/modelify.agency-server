@@ -3,9 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const keys = require('../../config/keys');
-const upload = require('../services/file-upload');
 
-const singleUpload = upload.single('image');
 
 const signup = (req, res) => {
   const {
@@ -94,13 +92,8 @@ const getUserbyId = (req, res) => {
 const updateUser = (req, res) => {
   const { user, body: newDetails } = req;
   const { image, ...details } = newDetails;
+
   if (user) {
-    singleUpload(image, res, (err, data) => {
-      if (err) {
-        return res.status(400).send({ error: 'Could not update image' });
-      }
-      console.log(data);
-    });
     User.findOneAndUpdate({ _id: user.id }, details, (err, updatedUser) => {
       if (err) return res.status(400).json({ error: 'Could not update user' });
       if (updatedUser) {
@@ -136,10 +129,25 @@ const deleteUser = (req, res) => {
   }
 };
 
+const uploadImage = (req, res) => {
+  const { user } = req;
+  console.log(req.file);
+  // if(user) {
+  //   singleUpload(req, res, (err) => {
+  //     if (err) {
+  //       return res.status(400).send({ error: err });
+  //     }
+  //     console.log(req.file);
+  //     //return res.status(200).json({'imageUrl': req.file.location});
+  //   });
+  //}
+};
+
 module.exports = {
   signup,
   login,
   getUserbyId,
   updateUser,
   deleteUser,
+  uploadImage,
 };
