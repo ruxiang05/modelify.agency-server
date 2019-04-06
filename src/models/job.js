@@ -1,3 +1,4 @@
+/* Job schema, uses moongoose methods */
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;

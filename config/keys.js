@@ -1,4 +1,5 @@
-/* eslint-disable */
+/* Produce keys depending on environment */
+/* eslint-disable */ 
 if (process.env.NODE_ENV === 'production') {
   module.exports = require('./env/prod');
 } else if (process.env.NODE_ENV === 'test') {

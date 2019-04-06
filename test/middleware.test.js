@@ -1,3 +1,4 @@
+/* Agent tests, uses mongoose, jwt and supertest methods */
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');

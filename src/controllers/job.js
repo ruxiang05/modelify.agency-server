@@ -1,3 +1,4 @@
+/* Job controller, uses moongoose methods */
 const mongoose = require('mongoose');
 const Job = require('../models/job');
 const User = require('../models/user');
@@ -19,6 +20,7 @@ const createJob = (req, res) => {
         newJob
           .save()
           .then(async (savedJob) => {
+            // Create chat for the job
             await chatController.createChat(savedJob);
             return res.status(200).json({ message: 'Job created', job: savedJob });
           })

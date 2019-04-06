@@ -1,3 +1,4 @@
+/* Agent tests, uses mongoose, jwt bcrypt and supertest methods */
 const request = require('supertest');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');

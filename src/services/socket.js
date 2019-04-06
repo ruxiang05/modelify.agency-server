@@ -1,3 +1,4 @@
+/* Socket service, uses socket.io methods */
 /* eslint-disable no-param-reassign */
 const chatController = require('../controllers/chat');
 

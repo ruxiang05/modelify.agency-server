@@ -1,3 +1,4 @@
+/* All routes, uses express methods */
 const express = require('express');
 const UserRoutes = require('./user');
 const JobRoutes = require('./job');

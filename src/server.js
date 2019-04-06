@@ -1,3 +1,4 @@
+/* Entry point, uses methods of open-source software listed below */
 const app = require('express')();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -36,7 +37,7 @@ io.on('connection', (socket) => {
   socketHandler(socket, io);
 });
 /* istanbul ignore next */
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test') { // Don't listen to port when testing, otherwise they fail
   server.listen(PORT, (err) => {
     if (err) {
       throw err;

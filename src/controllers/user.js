@@ -1,3 +1,4 @@
+/* User controller, uses moongoose, bcrypt and jwt methods */
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -17,6 +18,7 @@ const signup = (req, res) => {
           error: 'Email already used',
         });
       }
+      // Encrypt password and save the hash
       bcrypt.hash(password, 10).then((hash) => {
         const newUser = new User({
           _id: new mongoose.Types.ObjectId(),
@@ -41,6 +43,7 @@ const login = (req, res) => {
           error: 'Email not found',
         });
       }
+      // Hash the retrieved password and compare it to the one in the DB
       bcrypt.compare(password, user.password).then((result) => {
         if (result) {
           const userData = user.toObject();
@@ -71,7 +74,8 @@ const updateUser = (req, res) => {
   User.findOneAndUpdate({ _id: user.id }, newDetails, { new: true }).then((updatedUser) => {
     const userData = updatedUser.toObject();
     delete userData.password;
-        delete userData.__v; //eslint-disable-line
+    delete userData.__v; //eslint-disable-line
+    // Create new token with the updated user data
     const token = jwt.sign(
       {
         user: userData,
