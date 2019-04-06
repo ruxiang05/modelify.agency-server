@@ -23,7 +23,7 @@ const addModel = (req, res) => {
 
 const getModels = (req, res) => {
   const agent = req.user;
-  User.findOne({ _id: agent.id }, '-password -__v').populate('agentInfo.models', '-password -__v').exec()
+  User.findOne({ _id: agent.id }, '-password -__v ').populate('agentInfo.models', '-password -googleCalendarAPIToken -__v').exec()
     .then(foundAgent => res.status(200).json({ message: 'Retrieved all models', agent: foundAgent }));
 };
 
