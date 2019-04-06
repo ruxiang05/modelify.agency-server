@@ -1,3 +1,4 @@
+/* Chat controller, uses moongoose methods */
 const mongoose = require('mongoose');
 const Chat = require('../models/chat');
 const Message = require('../models/message');
@@ -32,6 +33,7 @@ const addMessage = async (data) => {
 
   const savedMessage = await newMessage.save();
   const foundChat = await Chat.findOne({ _id: room }).exec();
+  // Link message to the chat
   foundChat.messages.push(savedMessage._id);
   const updatedChat = await foundChat.save();
   return updatedChat;

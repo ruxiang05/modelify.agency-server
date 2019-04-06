@@ -1,3 +1,4 @@
+/* Agent controller, uses moongoose methods */
 const User = require('../models/user');
 
 const addModel = (req, res) => {
@@ -10,7 +11,9 @@ const addModel = (req, res) => {
     .then((foundModel) => {
       if (!foundModel) return res.status(500).json({ error: 'Model not in database' });
       User.findById(agent.id, '-password').then((foundAgent) => {
+        // Check if the model is already linked
         if (foundAgent.agentInfo.models.indexOf(foundModel.id) === -1) {
+          // Link model id to agent
           foundAgent.agentInfo.models.push(foundModel.id);
           foundAgent.save();
         } else {

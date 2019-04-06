@@ -1,3 +1,4 @@
+/* Google calendar service, uses Google API and mongoose */
 const { google } = require('googleapis');
 const User = require('../models/user');
 

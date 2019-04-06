@@ -1,7 +1,7 @@
+/* Agent tests, uses mongoose and supertest methods */
 const request = require('supertest');
 const mongoose = require('mongoose');
 const server = require('../src/server');
-const User = require('../src/models/user');
 
 let agentToken;
 const model = {
